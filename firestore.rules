@@ -1,0 +1,37 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    match /test/{docId} {
+      allow read, write: if true;
+    }
+
+    match /products/{productId} {
+      allow read, write: if true;
+    }
+
+    match /outlets/{outletId} {
+      allow read, write: if true;
+    }
+
+    match /users/{userId} {
+      allow read, write: if true;
+    }
+
+    match /dealer/{productId} {
+      allow read, write: if true;
+    }
+
+    match /log/{logId} {
+      allow read, write: if true;
+    }
+
+    match /meta/{metaId} {
+      allow read, write: if true;
+    }
+  }
+}

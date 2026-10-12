@@ -1,0 +1,90 @@
+{
+  "entities": {
+    "Product": {
+      "title": "Product",
+      "description": "An appliance or consumer electronic product in inventory",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 30 },
+        "cat": { "type": "string", "maxLength": 50 },
+        "brand": { "type": "string", "maxLength": 50 },
+        "model": { "type": "string", "maxLength": 100 },
+        "mrp": { "type": "number" },
+        "qty": { "type": "number" },
+        "stock": { "type": "object" },
+        "a": { "type": "object" }
+      },
+      "required": ["id", "cat", "brand", "model"]
+    },
+    "Outlet": {
+      "title": "Outlet",
+      "description": "A physical retail store or warehouse branch",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 30 },
+        "name": { "type": "string", "maxLength": 60 }
+      },
+      "required": ["id", "name"]
+    },
+    "TeamUser": {
+      "title": "TeamUser",
+      "description": "A team member with role-based permissions",
+      "type": "object",
+      "properties": {
+        "name": { "type": "string", "maxLength": 50 },
+        "role": { "type": "string", "maxLength": 30 },
+        "add": { "type": "number" },
+        "edit": { "type": "number" },
+        "del": { "type": "number" },
+        "sell": { "type": "number" }
+      },
+      "required": ["name", "role"]
+    },
+    "DealerPrice": {
+      "title": "DealerPrice",
+      "description": "Owner confidential purchase price for a product",
+      "type": "object",
+      "properties": {
+        "v": { "type": "number" }
+      },
+      "required": ["v"]
+    },
+    "ActivityLog": {
+      "title": "ActivityLog",
+      "description": "Audit entry for stock and product adjustments",
+      "type": "object",
+      "properties": {
+        "t": { "type": "number" },
+        "who": { "type": "string", "maxLength": 50 },
+        "act": { "type": "string", "maxLength": 50 },
+        "outlet": { "type": "string", "maxLength": 50 },
+        "cat": { "type": "string", "maxLength": 50 },
+        "brand": { "type": "string", "maxLength": 50 },
+        "model": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["t", "who", "act"]
+    }
+  },
+  "firestore": {
+    "/products/{productId}": {
+      "schema": "Product",
+      "description": "Collection of all inventory products"
+    },
+    "/outlets/{outletId}": {
+      "schema": "Outlet",
+      "description": "Store branches and retail outlets"
+    },
+    "/users/{username}": {
+      "schema": "TeamUser",
+      "description": "Team staff accounts and permissions"
+    },
+    "/dealer/{productId}": {
+      "schema": "DealerPrice",
+      "description": "Confidential dealer cost prices accessible only to owners"
+    },
+    "/log/{logId}": {
+      "schema": "ActivityLog",
+      "description": "Activity logs for stock operations"
+    }
+  }
+}

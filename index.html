@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mehta Sales</title>
+  <meta name="description" content="Stock and catalogue management system for consumer electronics and appliances with multi-outlet tracking, role-based access, and Excel export.">
+  <meta property="og:title" content="Mehta Sales">
+  <meta property="og:description" content="Stock and catalogue management system for consumer electronics and appliances with multi-outlet tracking, role-based access, and Excel export.">
+  <meta property="og:type" content="website">
+  <meta name="theme-color" content="#4f46e5">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Mehta Sales">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🏬</text></svg>">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#eef1fb;--fg:#161a2b;--card:rgba(255,255,255,.8);--bd:rgba(30,40,90,.12);--ac:#4f46e5;--ac2:#06b6d4;--mut:#5d647c;--ok:#0f9d58;--sh:0 8px 24px rgba(40,50,120,.12)}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b0d14;--fg:#e9ecf5;--card:rgba(255,255,255,.05);--bd:rgba(255,255,255,.1);--ac:#7c83ff;--ac2:#22d3ee;--mut:#9aa3bd;--ok:#34d399;--sh:0 8px 30px rgba(0,0,0,.45)}}
+:root[data-theme="dark"]{--bg:#0b0d14;--fg:#e9ecf5;--card:rgba(255,255,255,.05);--bd:rgba(255,255,255,.1);--ac:#7c83ff;--ac2:#22d3ee;--mut:#9aa3bd;--ok:#34d399;--sh:0 8px 30px rgba(0,0,0,.45)}
+*{box-sizing:border-box}
+body{margin:0;background-color:var(--bg);background-image:radial-gradient(900px 500px at 10% -10%,color-mix(in srgb,var(--ac) 28%,transparent),transparent),radial-gradient(800px 500px at 100% 0,color-mix(in srgb,var(--ac2) 22%,transparent),transparent);background-attachment:fixed;color:var(--fg);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+.w{max-width:1120px;margin:0 auto;padding:14px;animation:in .4s ease}@keyframes in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+header{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin-bottom:14px}
+h1{font-size:22px;margin:0;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent;font-weight:800;letter-spacing:-.02em}h2{font-size:15px;margin:14px 0 8px}
+.tabs{display:flex;gap:6px;margin-bottom:14px;background:var(--card);border:1px solid var(--bd);border-radius:14px;padding:5px;width:fit-content;backdrop-filter:blur(10px)}
+button,.chip{font:inherit;cursor:pointer;border:1px solid var(--bd);background:var(--card);color:var(--fg);border-radius:10px;padding:7px 13px;transition:.15s}
+button:hover,.chip:hover{border-color:var(--ac);transform:translateY(-1px)}
+.tabs button{border:0;background:none}.tabs button:hover{transform:none}
+button.p,.chip.on,.tabs .on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent;box-shadow:0 4px 14px color-mix(in srgb,var(--ac) 40%,transparent)}
+.chip{border-radius:999px;padding:6px 14px;margin:0 6px 8px 0;display:inline-block}.chip.off{opacity:.38;text-decoration:line-through}
+button.dg{color:#e5484d}
+input,select{font:inherit;color:var(--fg);background:var(--card);border:1px solid var(--bd);border-radius:10px;padding:9px 11px;width:100%;outline:none}input:focus,select:focus{border-color:var(--ac);box-shadow:0 0 0 3px color-mix(in srgb,var(--ac) 25%,transparent)}
+.box{background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:14px;box-shadow:var(--sh);backdrop-filter:blur(12px)}
+.srch{font-size:17px;padding:14px 16px;border-radius:14px}
+.cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:10px;margin-bottom:12px}
+.tile{cursor:pointer;text-align:center;padding:12px 6px;border-radius:14px;border:1px solid var(--bd);background:var(--card);transition:.2s}.tile:hover{transform:translateY(-3px);border-color:var(--ac)}
+.tile.on{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;border-color:transparent}.tile .e{font-size:30px}.tile small{display:block;opacity:.75;font-size:11px}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.card{position:relative;overflow:hidden;background:var(--card);border:1px solid var(--bd);border-radius:16px;padding:14px;box-shadow:var(--sh);transition:.2s;backdrop-filter:blur(10px);animation:in .35s ease}
+.card:before{content:"";position:absolute;inset:0 0 auto 0;height:4px;background:linear-gradient(90deg,var(--ac),var(--ac2))}
+.card:hover{transform:translateY(-4px)}.card.out{opacity:.42;filter:grayscale(1)}.card.out:before{background:var(--mut)}
+.ic{position:absolute;right:10px;top:12px;font-size:26px;opacity:.9}
+.b{font-size:11px;color:var(--ac);text-transform:uppercase;letter-spacing:.09em;font-weight:700}.m{font-weight:700;font-size:17px;margin:2px 0 8px;padding-right:34px}
+.pill{display:inline-block;font-size:12px;padding:2px 9px;border-radius:999px;background:color-mix(in srgb,var(--ac) 14%,transparent);margin:0 4px 4px 0}
+.r{display:flex;justify-content:space-between;align-items:center;margin-top:8px}.pr{font-size:19px;font-weight:800}
+.st{font-size:12px;font-weight:600;color:var(--ok)}.st:before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:5px}.out .st{color:var(--mut)}
+.d{margin-top:8px;font-size:12px;color:#d99100;font-weight:600}
+.f{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+label{font-size:12px;color:var(--mut);display:block;margin-bottom:3px}
+.sc{overflow-x:auto}table{border-collapse:collapse;width:100%;min-width:640px}td,th{border-bottom:1px solid var(--bd);padding:8px 6px;text-align:left;font-size:13px}th{color:var(--mut);font-weight:600}
+td button{padding:3px 9px}.mut{color:var(--mut)}.err{color:#e5484d;margin-left:8px}
+.bl label,.pm label{display:inline-block;margin:0 12px 6px 0;font-size:13px;color:var(--fg)}.bl input,.pm input{width:auto}
+.stt{font-size:12px;padding:5px 10px;border-radius:999px;border:1px solid var(--bd);background:var(--card)}
+#toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);background:#e5484d;color:#fff;padding:9px 16px;border-radius:12px;display:none;z-index:9;max-width:90%}
+.hero{max-width:360px;margin:12vh auto;text-align:center}.hero .big{font-size:56px}.hero input{margin-bottom:10px;text-align:center}.hero button{width:100%;padding:11px}
+
+.w{max-width:none;padding:0}
+body:after{content:"";position:fixed;width:420px;height:420px;border-radius:50%;background:var(--ac2);filter:blur(120px);opacity:.14;right:-100px;bottom:-100px;animation:fl 12s ease-in-out infinite alternate;pointer-events:none;z-index:-1}@keyframes fl{to{transform:translate(-140px,-90px)}}
+.shell{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+.side{position:sticky;top:0;height:100vh;height:100dvh;overflow:auto;padding:16px 12px;display:flex;flex-direction:column;gap:3px;background:var(--card);border-right:1px solid var(--bd);backdrop-filter:blur(18px)}
+.logo{display:flex;gap:10px;align-items:center;font-size:30px;margin-bottom:10px}.logo b{font-size:16px;display:block;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}.logo small,.who small{display:block;font-size:11px;color:var(--mut);font-size:11px}
+.who{display:flex;gap:10px;align-items:center;padding:10px;border-radius:14px;border:1px solid var(--bd);margin-bottom:6px}.who b{font-size:14px}.av{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:800;color:#fff;background:linear-gradient(135deg,var(--ac),var(--ac2))}
+.sec{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--mut);margin:12px 8px 4px}
+.nv{display:flex;align-items:center;gap:10px;width:100%;text-align:left;border:0;background:none;padding:10px 12px;border-radius:12px}.nv span{width:22px;text-align:center}.nv em{margin-left:auto;font-style:normal;font-size:11px;opacity:.7}.nv.sm{padding:7px 12px;font-size:14px}
+.nv:hover{background:color-mix(in srgb,var(--ac) 14%,transparent);transform:none}
+.nv.on,.nv.on:hover{background:linear-gradient(135deg,var(--ac),var(--ac2));color:#fff;box-shadow:0 6px 18px color-mix(in srgb,var(--ac) 40%,transparent)}
+.sp{flex:1;min-height:12px}.side .stt{align-self:flex-start;margin:6px 8px}
+.main{padding:20px;min-width:0}.top{display:flex;align-items:center;gap:10px;margin-bottom:16px}.top h1{font-size:28px;margin-right:auto}.mb,.ov{display:none}
+.ph{display:none}
+.stats{display:grid;grid-template-columns:repeat(auto-fill,minmax(170px,1fr));gap:12px;margin-bottom:14px}
+.stat{position:relative;overflow:hidden;padding:16px;border-radius:18px;border:1px solid var(--bd);background:var(--card);box-shadow:var(--sh);transition:.2s;animation:in .4s ease}.stat:hover{transform:translateY(-4px)}
+.stat:after{content:"";position:absolute;right:-30px;top:-30px;width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,var(--ac),var(--ac2));opacity:.18}
+.si{font-size:22px}.sn{font-size:26px;font-weight:800;background:linear-gradient(90deg,var(--ac),var(--ac2));-webkit-background-clip:text;background-clip:text;color:transparent}.sl{color:var(--mut);font-size:12px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:14px}.li{padding:7px 0;border-bottom:1px solid var(--bd);margin:0}
+.bar{display:grid;grid-template-columns:150px 1fr 40px;gap:8px;align-items:center;margin:9px 0;font-size:13px}.bar i{height:10px;border-radius:999px;background:var(--bd);overflow:hidden}.bar b{display:block;height:100%;background:linear-gradient(90deg,var(--ac),var(--ac2));border-radius:999px;transition:width .6s}.bar em{font-style:normal;text-align:right}
+@media(max-width:820px){.shell{grid-template-columns:1fr}.side{position:fixed;z-index:20;left:0;top:0;bottom:0;height:auto;width:275px;transform:translateX(-105%);transition:.25s;padding-top:calc(16px + env(safe-area-inset-top,0px));background:var(--bg)}.open .side{transform:none}.mb{display:block}.open .ov{display:block;position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:15}.two{grid-template-columns:1fr}.top h1{font-size:21px}.bar{grid-template-columns:110px 1fr 34px}.main{padding:12px}}
+
+input,select,textarea{font-size:16px}
+.bnav{display:none}
+html{-webkit-text-size-adjust:100%;overscroll-behavior-y:none}button{touch-action:manipulation}
+@media(max-width:820px){
+.main{padding:12px 12px calc(88px + env(safe-area-inset-bottom,0px))}
+.bnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:12;padding:6px 6px calc(6px + env(safe-area-inset-bottom,0px));background:var(--bg);border-top:1px solid var(--bd)}
+.bnav button{flex:1;border:0;background:none;display:flex;flex-direction:column;align-items:center;gap:1px;font-size:11px;padding:6px 2px;color:var(--mut);border-radius:12px;box-shadow:none}
+.bnav button span{font-size:20px;line-height:1.1}.bnav .on{color:var(--ac);background:color-mix(in srgb,var(--ac) 14%,transparent)}
+.top .p,.mb{display:none}.top h1{font-size:20px}
+.grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.card{padding:11px}.m{font-size:15px;padding-right:24px}.pr{font-size:16px}.ic{font-size:20px;right:8px;top:10px}.r{flex-wrap:wrap;gap:2px}
+.cats{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:96px;overflow-x:auto;padding-bottom:4px;scrollbar-width:none}.cats::-webkit-scrollbar{display:none}
+.f{grid-template-columns:1fr 1fr}.box{padding:12px;border-radius:14px}
+.stats{grid-template-columns:1fr 1fr}.stat{padding:12px}.sn{font-size:20px}
+#toast{bottom:calc(88px + env(safe-area-inset-bottom,0px))}
+table{min-width:0}table,tbody,tr,td{display:block}tr:first-child{display:none}
+tr{border:1px solid var(--bd);border-radius:12px;padding:8px 10px;margin-bottom:8px}
+td{border:0;padding:3px 0}td.mp:before{content:"MRP ";color:var(--mut)}td.dp:before{content:"Dealer ";color:var(--mut)}
+.sc{overflow:visible}.bar{grid-template-columns:100px 1fr 30px}
+}
+@media(pointer:coarse){button,.chip,.nv{min-height:40px}.chip{padding:8px 14px}td button{min-height:36px;min-width:36px}}
+.os{display:flex;align-items:center;gap:6px;margin:3px 0;white-space:nowrap}.os small{min-width:78px;color:var(--mut);font-size:12px}.os b{min-width:22px;text-align:center}
+.ol{font-size:12px;color:var(--mut);margin:2px 0 4px}
+.top select{width:auto;max-width:46%;padding:7px 10px}
+</style>
+</head>
+<body>
+<div class="w" id="app"></div>
+<div id="toast"></div>
+<script>
+const $=s=>document.querySelector(s),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const mem={},ST={get(k){try{return localStorage.getItem(k)}catch(e){return mem[k]??null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){mem[k]=v}}};
+let db=null;try{db=JSON.parse(ST.get('shopdb'))}catch(e){}db=db||{products:[],users:[]};
+let cloud=false,H=null,loc={products:[],users:[]},rp=[],dm={},rdy=false;
+const save=()=>{if(!cloud)ST.set('shopdb',JSON.stringify(db))};
+function note(m,ok){const t=$('#toast');t.textContent=m;t.style.background=ok==2?'#4f46e5':ok?'#12a150':'#e5484d';t.style.display='block';setTimeout(()=>t.style.display='none',4000)}
+const strip=p=>{const{dealer,...x}=p;return x};
+const uid=n=>'u_'+encodeURIComponent(n.toLowerCase()).replace(/%/g,'_');
+async function hash(n,p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(n.toLowerCase()+':'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return n.toLowerCase()+':'+p}}
+async function sync(kind,id){save();if(!H)return;try{
+if(kind=='p'){const p=db.products.find(p=>p.id==id);if(p){await H.doc('products/'+id).set(strip(p));if(me.owner&&p.dealer!=='')await H.doc('dealer/'+id).set({v:p.dealer})}else{await H.doc('products/'+id).delete();if(me.owner)await H.doc('dealer/'+id).delete().catch(()=>{})}}
+else{const u=db.users.find(x=>x.name==id);if(u)await H.doc('team/'+uid(id)).set(u);else await H.doc('team/'+uid(id)).delete()}}catch(e){note('Could not save to the shared database: '+(e.message||e.code))}}
+function rebuild(){db.products=rp.map(p=>({...p,dealer:dm[p.id]??''}))}
+function refresh(){if(!me)return;const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)){if(S.tab=='cat'&&$('#res')){$('#fc').innerHTML=facets();$('#res').innerHTML=results()}}else render()}
+(async()=>{try{if(!(window.claude&&claude.use))return;const d=await claude.use('db');if(!d)return;H=d;cloud=true;loc=db;db={products:[],users:[]};
+H.collection('products').onSnapshot(s=>{rp=s.docs.map(d=>({...d.data(),id:d.id}));rdy=true;rebuild();refresh()},()=>{});
+H.collection('dealer').onSnapshot(s=>{dm={};s.docs.forEach(d=>dm[d.id]=d.data().v);rebuild();refresh()},()=>{});
+H.collection('team').onSnapshot(s=>{db.users=s.docs.map(d=>d.data());refresh()},()=>{});
+if(me)me=mk(me.name)||me;refresh()}catch(e){}})();
+const CATS={
+'TV':{i:'📺',f:[{k:'size',l:'Screen size',u:' inch',o:['24','32','40','43','50','55','65','75']},{k:'type',l:'Type',o:['LED','Smart LED','Android','Google TV','QLED']}]},
+'Washing Machine':{i:'🧺',f:[{k:'type',l:'Type',o:['Semi-Automatic','Fully Automatic']},{k:'load',l:'Load',o:['Top Load','Front Load'],when:a=>a.type=='Fully Automatic'},{k:'cap',l:'Capacity',u:' kg',o:['6','6.5','7','7.5','8','9','10']}]},
+'Refrigerator':{i:'🧊',f:[{k:'doors',l:'Doors',o:['Single Door','Double Door','Triple Door','Side by Side']},{k:'cap',l:'Capacity',u:' L',o:['165','190','236','260','300','350','500']},{k:'star',l:'Rating',o:['2 Star','3 Star','4 Star','5 Star']}]},
+'Air Conditioner':{i:'❄️',f:[{k:'type',l:'Type',o:['Split','Window']},{k:'ton',l:'Capacity',u:' Ton',o:['1','1.5','2']},{k:'star',l:'Rating',o:['3 Star','5 Star']},{k:'inv',l:'Compressor',o:['Inverter','Non-Inverter']}]},
+'Air Cooler':{i:'💨',f:[{k:'type',l:'Type',o:['Personal','Tower','Desert']},{k:'cap',l:'Capacity',u:' L',o:['20','30','50','70','100']}]},
+'Microwave':{i:'🍲',f:[{k:'type',l:'Type',o:['Solo','Grill','Convection']},{k:'cap',l:'Capacity',u:' L',o:['20','23','25','30']}]},
+'Other':{i:'📦',f:[{k:'type',l:'Type / name',o:[]},{k:'spec',l:'Details (size, colour…)',o:[]}]}};
+const BR=['Samsung','LG','Sony','Panasonic','Whirlpool','Haier','Godrej','Voltas','Hisense','TCL','Mi','IFB','Bosch','Daikin','Hitachi','Blue Star','Symphony','Bajaj','Kenstar','Onida'];
+const fs=(c,a)=>CATS[c].f.filter(f=>!f.when||f.when(a||{}));
+const brands=()=>[...new Set([...BR,...db.products.map(p=>p.brand)])].sort();
+let me=null,S={tab:'cat',cat:'TV',brand:'',a:{},q:'',sure:''},F=blank(),U=ublank();
+function blank(c){return{id:'',cat:c||'TV',brand:'',model:'',a:{},qty:'',mrp:'',dealer:''}}
+function ublank(){return{old:'',name:'',pw:'',role:'sales',add:0,edit:0,del:0,sell:1,blocked:[]}}
+try{const n=sessionStorage.getItem('shopme');if(n)me=mk(n)}catch(e){}
+function mk(n){if(n=='parth')return{name:'parth',owner:1,add:1,edit:1,del:1,blocked:[]};const u=db.users.find(x=>x.name==n);return u?{...u,owner:0}:null}
+const P=()=>db.products.filter(p=>me.owner||!(me.blocked||[]).includes(p.brand));
+const num=v=>/^[\d.]+$/.test(v);const srt=a=>a.sort((x,y)=>num(x)&&num(y)?x-y:String(x).localeCompare(y));
+const pills=p=>fs(p.cat,p.a).map(f=>p.a[f.k]?`<span class="pill">${esc(p.a[f.k]+(f.u||''))}</span>`:'').join('');
+const specs=p=>fs(p.cat,p.a).map(f=>p.a[f.k]?p.a[f.k]+(f.u||''):'').filter(Boolean).join(' · ');
+const rs=v=>v===''||v==null?'—':'₹'+Number(v).toLocaleString('en-IN');
+function match(p,ex){if(p.cat!=S.cat)return false;if(ex!='brand'&&S.brand&&p.brand!=S.brand)return false;for(const k in S.a)if(k!=ex&&p.a[k]!=S.a[k])return false;return true}
+function sm(p,q){q=q.toLowerCase().replace(/(\d)\s*(inch|in|")/g,'$1 ');const h=(p.cat+' '+p.brand+' '+p.model+' '+Object.values(p.a).join(' ')).toLowerCase(),w=h.split(/[^a-z0-9.]+/);return q.split(/\s+/).filter(t=>t&&!['inch','in','"'].includes(t)).every(t=>num(t)?w.includes(t):h.includes(t))}
+function card(p,sc){return`<div class="card ${p.qty>0?'':'out'}"><div class="ic">${CATS[p.cat].i}</div><div class="b">${esc(sc?p.cat+' · ':'')}${esc(p.brand)}</div><div class="m">${esc(p.model)}</div><div>${pills(p)}</div>${outletLine(p)}<div class="r"><span class="pr">${rs(p.mrp)}</span><span class="st">${p.qty>0?p.qty+' in stock':'Out of stock'}</span></div>${me.owner&&p.dealer!==''?`<div class="d">Dealer: ${rs(p.dealer)}</div>`:''}</div>`}
+function chips(lbl,opts,sel,act,k,u){return`<div><label>${lbl}</label>${opts.map(o=>`<span class="chip ${sel==o.v?'on':''} ${o.out?'off':''}" data-act="${act}" data-k="${k||''}" data-v="${esc(o.v)}">${esc(o.v+(u||''))}</span>`).join('')||'<span class="mut">none in stock list</span>'}</div>`}
+function facets(){let h='';const bl=P().filter(p=>match(p,'brand')),bs=srt([...new Set(bl.map(p=>p.brand))]);
+h+=chips('Brand',bs.map(v=>({v,out:!bl.some(p=>p.brand==v&&p.qty>0)})),S.brand,'brand');
+for(const f of fs(S.cat,S.a)){const l=P().filter(p=>match(p,f.k)),os=srt([...new Set(l.map(p=>p.a[f.k]).filter(Boolean))]);h+=chips(f.l,os.map(v=>({v,out:!l.some(p=>p.a[f.k]==v&&p.qty>0)})),S.a[f.k],'attr',f.k,f.u)}return h}
+function results(){const all=P();
+if(S.q.trim()){const l=all.filter(p=>sm(p,S.q));if(!l.length)return'<p class="mut">No matching models.</p>';const g={};l.forEach(p=>(g[p.brand]=g[p.brand]||[]).push(p));
+return Object.keys(g).sort().map(b=>{const a=g[b].sort((x,y)=>(y.qty>0)-(x.qty>0));return`<h2>${esc(b)} <span class="mut">· ${a.filter(p=>p.qty>0).length} available</span></h2><div class="grid">${a.map(p=>card(p,1)).join('')}</div>`}).join('')}
+const l=all.filter(p=>match(p,null)).sort((x,y)=>(y.qty>0)-(x.qty>0)||x.brand.localeCompare(y.brand));
+if(!all.length)return`<p class="mut">No stock yet. Add items in the Stock tab.</p>`;
+return l.length?`<div class="grid">${l.map(p=>card(p)).join('')}</div>`:'<p class="mut">No models for this selection.</p>'}
+function catView(){const n=c=>P().filter(p=>p.cat==c).length;return`<div class="box"><input id="q" class="srch" placeholder="🔍  Search: 32, 43 inch LED, Samsung, double door…" value="${esc(S.q)}"></div>
+<div id="flt" style="${S.q?'display:none':''}"><div class="cats">${Object.keys(CATS).map(c=>`<div class="tile ${S.cat==c?'on':''}" data-act="cat" data-v="${c}"><div class="e">${CATS[c].i}</div>${c}<small>${n(c)} models</small></div>`).join('')}</div><div class="box"><div id="fc">${facets()}</div><button data-act="clear">Clear filters</button></div></div><div id="res">${results()}</div>`}
+function fval(f,v){return`<div><label>${f.l}${f.u||''}</label><input list="dl_${f.k}" data-fa="${f.k}" value="${esc(v||'')}"><datalist id="dl_${f.k}">${f.o.map(o=>`<option value="${o}">`).join('')}</datalist></div>`}
+function stockView(){const can=me.owner||me.add||(F.id&&me.edit);
+const form=can?`<div class="box"><h2>${F.id?'Edit item':'Add item'}</h2><div class="f"><div><label>Category</label><select data-f="cat">${Object.keys(CATS).map(c=>`<option ${F.cat==c?'selected':''}>${c}</option>`).join('')}</select></div>
+<div><label>Brand</label>${F.nb?`<input data-f="brand" placeholder="Type the new brand name" autocomplete="off" value="${esc(F.brand)}"><a data-act="pickB" style="cursor:pointer;font-size:12px;color:var(--ac)">← pick from list</a>`:`<select data-bs><option value="">Select brand…</option>${brands().filter(b=>me.owner||!(me.blocked||[]).includes(b)).map(b=>`<option ${F.brand==b?'selected':''}>${esc(b)}</option>`).join('')}<option value="__new">➕ New brand…</option></select>`}</div>
+<div><label>Product / model name</label><input data-f="model" placeholder="Type the model name" autocomplete="off" value="${esc(F.model)}"></div>${fs(F.cat,F.a).map(f=>fval(f,F.a[f.k])).join('')}
+${outletInputs()}<div><label>MRP / selling price ₹</label><input type="number" min="0" data-f="mrp" value="${esc(F.mrp)}"></div>
+${me.owner?`<div><label>Dealer price ₹ (owner only)</label><input type="number" min="0" data-f="dealer" value="${esc(F.dealer)}"></div>`:''}</div>
+<p><button class="p" data-act="saveP">${F.id?'Update':'Add to stock'}</button> ${F.id?'<button data-act="newP">Cancel</button>':''}<span class="err" id="ferr"></span></p></div>`:'';
+const rows=[...db.products].filter(p=>me.owner||!(me.blocked||[]).includes(p.brand)).sort((a,b)=>a.cat.localeCompare(b.cat)||a.brand.localeCompare(b.brand));
+if(S.tab=='add')return form;return(F.id?form:'')+`<div class="box"><input id="sf" placeholder="Filter this list…" style="margin-bottom:8px"><div class="sc"><table><tr><th>Item</th><th>Specs</th><th>Qty</th><th>MRP</th>${me.owner?'<th>Dealer</th>':''}<th></th></tr>${rows.map(p=>`<tr><td><b>${esc(p.brand)}</b> ${esc(p.model)}<div class="mut">${esc(p.cat)}</div></td><td>${esc(specs(p))}</td><td>${stepper(p)}</td><td class="mp">${rs(p.mrp)}</td>${me.owner?`<td class="dp">${rs(p.dealer)}</td>`:''}<td>${me.edit||me.owner?`<button data-act="editP" data-id="${p.id}">Edit</button> `:''}${me.del||me.owner?`<button class="dg" data-act="delP" data-id="${p.id}">${S.sure==p.id?'Sure?':'Delete'}</button>`:''}</td></tr>`).join('')||'<tr><td colspan="6" class="mut">Nothing yet.</td></tr>'}</table></div></div>`}
+function teamView(){return`<div class="box"><h2>${U.old?'Edit team member':'Add team member'}</h2><div class="f"><div><label>Username</label><input data-u="name" autocapitalize="none" value="${esc(U.name)}"></div><div><label>${U.old?'New password (blank = keep)':'Password (you set it)'}</label><input data-u="pw" autocapitalize="none" value="${esc(U.pw)}"></div></div>
+${roleBlock()}
+<h2>Blocked brands (hidden from this person)</h2><div class="bl">${brands().map(b=>`<label><input type="checkbox" data-ub="${esc(b)}" ${U.blocked.includes(b)?'checked':''}> ${esc(b)}</label>`).join('')}</div>
+<h2>Outlets this person can use</h2><div class="bl">${db.outlets.map(o=>`<label><input type="checkbox" data-uo="${esc(o.id)}" ${U.outlets==null||U.outlets.includes(o.id)?'checked':''}> ${esc(o.name)}</label>`).join('')}</div>
+<p><button class="p" data-act="saveU">${U.old?'Update':'Add member'}</button> ${U.old?'<button data-act="newU">Cancel</button>':''}<span class="err" id="uerr"></span></p></div>
+<div class="box"><h2>Team</h2>${db.users.map(u=>`<div class="r" style="padding:8px 0;border-bottom:1px solid var(--bd)"><span><b>${esc(u.name)}</b> <span class="pill">${esc(roleLabel(u))}</span> <span class="mut">${[u.add&&'add',u.edit&&'edit',u.del&&'delete',u.sell&&!u.edit&&'reduce stock'].filter(Boolean).join(', ')||'view only'}${u.blocked.length?' · blocked: '+esc(u.blocked.join(', ')):''}</span></span><span><button data-act="editU" data-v="${esc(u.name)}">Edit</button> <button class="dg" data-act="delU" data-v="${esc(u.name)}">${S.sure=='u:'+u.name?'Sure?':'Remove'}</button></span></div>`).join('')||'<span class="mut">No members yet.</span>'}</div>`}
+function render(){const a=$('#app');
+if(!me){a.innerHTML=`<div class="box hero"><div class="big">🏬</div><h1>Mehta Sales</h1><p class="mut">Sign in to continue</p><input id="lu" placeholder="Username" value="parth" autocomplete="username" autocapitalize="none" autocorrect="off"><input id="lp" type="password" placeholder="Password" value="apple8901" autocomplete="current-password" autocapitalize="none" autocorrect="off"><button class="p" data-act="login">Sign in</button><div class="err" id="le"></div></div>`;return}
+const tabs=[['cat','Catalogue'],['stock','Stock']].concat(me.owner?[['team','Team']]:[]);
+const up=cloud&&me.owner&&rdy&&!rp.length&&(loc.products.length||loc.users.length);
+a.innerHTML=`<header><h1>🏬 Mehta Sales</h1><span class="mut"><span class="stt">${cloud?'🟢 Live · shared':'💾 This device only'}</span> ${esc(me.name)}${me.owner?' (owner)':''} ${me.owner||me.add?'<button class="p" data-act="addP">＋ Add product</button> ':''}<button data-act="logout">Log out</button></span></header>${up?`<div class="box">This browser has stock saved locally. <button class="p" data-act="up">Upload it to the shared database</button></div>`:''}<div class="tabs">${tabs.map(t=>`<button class="${S.tab==t[0]?'on':''}" data-act="tab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>${S.tab=='cat'?catView():S.tab=='stock'?stockView():teamView()}`}
+function prune(){const ok=fs(S.cat,S.a).map(f=>f.k);for(const k in S.a)if(!ok.includes(k))delete S.a[k]}
+document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,v=t.dataset.v,id=t.dataset.id;
+if(a!='menu')S.menu=0;if(a=='xlsx'){exportXlsx();render();return}if(a=='addO'){addOutlet();return}if(a=='renO'){renOutlet(id);return}if(a=='delO'){delOutlet(id);return}if(a=='axl'){ST.set('autox',ST.get('autox')=='1'?'0':'1');render();return}if(a=='login'){doLogin();return}if(a=='saveU'){saveUser();return}if(a=='up'){upload();return}
+if(a=='logout'){me=null;ST.set('shoptok','');try{sessionStorage.removeItem('shopme')}catch(e){}}
+else if(a=='tab'){S.tab=v;S.sure=''}
+else if(a=='menu'){S.menu=!S.menu}
+else if(a=='cat'){S.cat=v;S.brand='';S.a={};S.tab='cat';S.q=''}
+else if(a=='brand'){S.brand=S.brand==v?'':v}
+else if(a=='attr'){const k=t.dataset.k;S.a[k]==v?delete S.a[k]:S.a[k]=v;prune()}
+else if(a=='clear'){S.brand='';S.a={}}
+else if(a=='qty'){const p=db.products.find(p=>p.id==id),o=t.dataset.o;p.stock=p.stock||{};p.stock[o]=Math.max(0,(+p.stock[o]||0)+ +t.dataset.d);reQty();sync('p',id)}
+else if(a=='editP'){const p=db.products.find(p=>p.id==id);F=JSON.parse(JSON.stringify(p));S.tab='add';scrollTo(0,0)}
+else if(a=='newP'){F=blank()}
+else if(a=='pickB'){F.nb=0;F.brand=''}
+else if(a=='addP'){F=blank(S.cat);S.tab='add';setTimeout(()=>scrollTo(0,0),0)}
+else if(a=='delP'){if(S.sure==id){db.products=db.products.filter(p=>p.id!=id);S.sure='';sync('p',id)}else S.sure=id}
+else if(a=='saveP'){const f=F;if(!f.brand.trim()||!f.model.trim()){$('#ferr').textContent=' Brand and model are required';return}
+const ok=fs(f.cat,f.a).map(x=>x.k),a2={};ok.forEach(k=>{if(f.a[k])a2[k]=String(f.a[k]).trim()});
+const rec={id:f.id||Math.random().toString(36).slice(2,9),cat:f.cat,brand:(brands().find(b=>b.toLowerCase()==f.brand.trim().toLowerCase())||f.brand.trim()),model:f.model.trim(),a:a2,stock:Object.fromEntries(vis().map(o=>[o.id,Math.max(0,parseInt((f.stock||{})[o.id])||0)])),qty:0,mrp:f.mrp,dealer:f.dealer};
+const i=db.products.findIndex(p=>p.id==rec.id);i<0?db.products.push(rec):db.products[i]=rec;reQty();sync('p',rec.id);note('Saved ✓ '+rec.brand+' '+rec.model,1);if(f.id)S.tab='stock';F=blank(F.cat)}
+else if(a=='newU'){U=ublank()}
+else if(a=='editU'){const x=db.users.find(x=>x.name==v);U={...JSON.parse(JSON.stringify(x)),old:x.name,pw:'',role:x.role||'custom'};scrollTo(0,0)}
+else if(a=='delU'){if(S.sure=='u:'+v){db.users=db.users.filter(x=>x.name!=v);S.sure='';sync('u',v)}else S.sure='u:'+v}
+render()});
+document.addEventListener('keydown',e=>{if(e.key=='Enter'&&e.target.id=='lp')doLogin()});
+document.addEventListener('input',e=>{const t=e.target;
+if(t.id=='q'){S.q=t.value;$('#res').innerHTML=results();$('#flt').style.display=S.q?'none':''}
+else if(t.id=='sf'){const q=t.value.toLowerCase();document.querySelectorAll('tr').forEach((r,i)=>{if(i)r.style.display=r.textContent.toLowerCase().includes(q)?'':'none'})}
+else if(t.dataset.fs){(F.stock=F.stock||{})[t.dataset.fs]=t.value}else if(t.dataset.f)F[t.dataset.f]=t.value;else if(t.dataset.fa)F.a[t.dataset.fa]=t.value;else if(t.dataset.u)U[t.dataset.u]=t.value;
+else if(t.dataset.uc)U[t.dataset.uc]=t.checked?1:0;
+else if(t.dataset.uo){const id=t.dataset.uo;let a=U.outlets==null?db.outlets.map(o=>o.id):U.outlets.slice();a=a.filter(x=>x!=id);if(t.checked)a.push(id);U.outlets=a}else if(t.dataset.ub){const b=t.dataset.ub;U.blocked=U.blocked.filter(x=>x!=b);if(t.checked)U.blocked.push(b)}});
+document.addEventListener('change',e=>{const t=e.target;if(t.dataset.out!==undefined){S.out=t.value;ST.set('shopout',S.out);reQty();render();return}if(t.dataset.role!==undefined){U.role=t.value;const r=ROLES[t.value];if(r){U.add=r.add;U.edit=r.edit;U.del=r.del;U.sell=r.sell}render();return}if(t.dataset.bs!==undefined){if(t.value=='__new'){F.nb=1;F.brand=''}else F.brand=t.value;render();if(F.nb)setTimeout(()=>{const i=document.querySelector('[data-f=brand]');i&&i.focus()},0)}else if(t.dataset.f=='cat'){F.cat=t.value;F.a={};render()}else if(t.dataset.fa=='type')render()});
+
+function sideHTML(){const nv=(k,i,l)=>`<button class="nv ${S.tab==k?'on':''}" data-act="tab" data-v="${k}"><span>${i}</span>${l}</button>`;
+return`<div class="logo">🏬<div><b>Mehta Sales</b><small>Stock & catalogue</small></div></div>
+<div class="who"><div class="av">${esc(me.name[0].toUpperCase())}</div><div><b>${esc(me.name)}</b><small>${esc(roleLabel(me))}${me.owner?' · full access':''}</small></div></div>
+<div class="sec">Menu</div>${nv('dash','📊','Dashboard')}${nv('cat','🛍️','Catalogue')}${me.owner||me.add?nv('add','➕','Add product'):''}${nv('stock','📦','Stock list')}${me.owner?nv('outlets','🏪','Outlets')+nv('team','👥','Team & access'):''}<button class="nv" data-act="xlsx"><span>📥</span>Download Excel</button><button class="nv sm" data-act="axl"><span>${ST.get('autox')=='1'?'🟢':'⚪'}</span>Auto-download after changes</button>
+<div class="sec">Categories</div>${Object.keys(CATS).map(c=>`<button class="nv sm ${S.tab=='cat'&&S.cat==c?'on':''}" data-act="cat" data-v="${c}"><span>${CATS[c].i}</span>${c}<em>${P().filter(p=>p.cat==c).length}</em></button>`).join('')}
+<div class="sp"></div><span class="stt">${cloud?'🟢 Live · shared':'💾 This device only'}</span><button class="nv" data-act="logout"><span>🚪</span>Log out</button>`}
+function dashView(){const L=P(),units=L.reduce((s,p)=>s+(+p.qty||0),0),out=L.filter(p=>!(p.qty>0)),low=L.filter(p=>p.qty>0&&p.qty<=2);
+const dv=L.reduce((s,p)=>s+(+p.qty||0)*(+p.dealer||0),0),mv=L.reduce((s,p)=>s+(+p.qty||0)*(+p.mrp||0),0);
+const st=(i,n,l)=>`<div class="stat"><div class="si">${i}</div><div class="sn">${n}</div><div class="sl">${l}</div></div>`;
+const cu=Object.keys(CATS).map(c=>[c,L.filter(p=>p.cat==c).reduce((s,p)=>s+(+p.qty||0),0)]),mx=Math.max(1,...cu.map(x=>x[1]));
+const li=a=>a.length?a.slice(0,8).map(p=>`<div class="r li"><span>${CATS[p.cat].i} <b>${esc(p.brand)}</b> ${esc(p.model)}</span><span class="mut">${p.qty>0?p.qty+' left':'out'}</span></div>`).join(''):'<span class="mut">None 🎉</span>';
+return`<div class="stats">${st('🧾',L.length,'Models')}${st('📦',units,'Units in stock')}${st('⚠️',low.length,'Low stock (2 or less)')}${st('⛔',out.length,'Out of stock')}${st('💰',rs(mv),'Stock value (MRP)')}${me.owner?st('🔒',rs(dv),'Stock value (dealer)'):''}</div>
+<div class="two"><div class="box"><h2>Units by category</h2>${cu.map(([c,n])=>`<div class="bar"><span>${CATS[c].i} ${c}</span><i><b style="width:${n/mx*100}%"></b></i><em>${n}</em></div>`).join('')}</div><div class="box"><h2>Out of stock</h2>${li(out)}<h2 style="margin-top:16px">Running low</h2>${li(low)}</div></div>`}
+function render(){const a=$('#app');
+if(!me){a.innerHTML=`<div class="box hero"><div class="big">🏬</div><h1>Mehta Sales</h1><p class="mut">Sign in to continue</p><input id="lu" placeholder="Username" value="parth" autocomplete="username" autocapitalize="none" autocorrect="off"><input id="lp" type="password" placeholder="Password" value="apple8901" autocomplete="current-password" autocapitalize="none" autocorrect="off"><button class="p" data-act="login">Sign in</button><div class="err" id="le"></div></div>`;return}
+if((S.tab=='team'||S.tab=='outlets')&&!me.owner)S.tab='cat';
+const up=cloud&&me.owner&&rdy&&!rp.length&&(loc.products.length||loc.users.length);
+const T={dash:'Dashboard',cat:'Catalogue',add:F.id?'Edit product':'Add product',stock:'Stock list',team:'Team & access',outlets:'Outlets'};
+const v=S.tab=='dash'?dashView():S.tab=='cat'?catView():S.tab=='team'?teamView():S.tab=='outlets'?outletsView():stockView();
+a.innerHTML=`<div class="shell ${S.menu?'open':''}"><div class="ov" data-act="menu"></div><aside class="side">${sideHTML()}</aside><main class="main"><div class="top"><button class="mb" data-act="menu">☰</button><h1>${T[S.tab]||''}</h1>${vis().length>1?`<select data-out><option value="">📍 All outlets</option>${vis().map(o=>`<option value="${esc(o.id)}" ${S.out==o.id?'selected':''}>${esc(o.name)}</option>`).join('')}</select>`:''}${me.owner||me.add?'<button class="p" data-act="addP">＋ Add product</button>':''}</div>${up?`<div class="box">This browser has stock saved locally. <button class="p" data-act="up">Upload it to the shared database</button></div>`:''}${v}</main>${bnav()}</div>`}
+function bnav(){const b=(k,i,l)=>`<button class="${S.tab==k?'on':''}" data-act="tab" data-v="${k}"><span>${i}</span>${l}</button>`;return`<nav class="bnav">${b('dash','📊','Home')}${b('cat','🛍️','Shop')}${me.owner||me.add?b('add','➕','Add'):''}${b('stock','📦','Stock')}<button data-act="menu"><span>☰</span>More</button></nav>`}
+var REV=-1,LA=Date.now(),PEND=0;const TK='shoptok';let Q=Promise.resolve(),booting=false;
+async function api(a,body){const t=ST.get(TK);const r=await fetch('/api',{method:'POST',headers:{'Content-Type':'application/json',...(t?{Authorization:'Bearer '+t}:{})},body:JSON.stringify({a,...body})});let d={};try{d=await r.json()}catch(e){}if(!r.ok){const e=new Error(d.error||'Server error ('+r.status+')');e.status=r.status;throw e}return d}
+function apply(d){me=d.me;db.outlets=d.outlets||[];db.products=d.products;db.users=d.users||[];reQty();if(d.rev!==undefined)REV=d.rev}
+function diffToast(old){if(!old.size)return;const m=[];for(const p of db.products){const o=old.get(p.id);if(!o)m.push('➕ '+p.brand+' '+p.model+' added');else if(+o.qty!==+p.qty)m.push(p.brand+' '+p.model+': '+o.qty+' → '+p.qty)}
+for(const[id,o]of old)if(!db.products.some(p=>p.id==id))m.push('🗑 '+o.brand+' '+o.model+' removed');
+if(m.length)note('Live update: '+m.slice(0,2).join(' · ')+(m.length>2?' +'+(m.length-2)+' more':''),2)}
+async function load(){try{const old=new Map(db.products.map(p=>[p.id,p]));apply(await api('load'));diffToast(old);refresh()}catch(e){if(e.status==401){me=null;ST.set(TK,'');render()}}}
+function sync(kind,id){PEND++;Q=Q.then(async()=>{try{if(kind=='p'){const p=db.products.find(p=>p.id==id);apply(p?await api('saveP',{p}):await api('delP',{id}))}else if(!db.users.find(x=>x.name==id))apply(await api('delU',{name:id}))}catch(e){note(e.message);await load()}PEND--;refresh();if(ST.get('autox')=='1'&&kind=='p'){clearTimeout(AX);AX=setTimeout(exportXlsx,1500)}});return Q}
+async function doLogin(){const u=$('#lu').value.trim(),p=$('#lp').value.trim();$('#le').textContent='';try{const d=await api('login',{u,p});ST.set(TK,d.token);apply(d);S.tab='cat';render()}catch(e){$('#le').textContent=e.message}}
+async function saveUser(){const u=U,n=u.name.trim();if(!n||(!u.pw&&!u.old)){$('#uerr').textContent=' Username and password required';return}
+try{apply(await api('saveU',{u:{old:u.old,name:n,pw:u.pw,add:+u.add,edit:+u.edit,del:+u.del,sell:+u.sell,role:u.role,blocked:u.blocked,outlets:u.outlets??null}}));U=ublank();note('Saved ✓',1);render()}catch(e){$('#uerr').textContent=' '+e.message}}
+function upload(){}
+db={products:[],users:[],outlets:[]};me=null;cloud=true;S.out=ST.get('shopout')||'';
+const _r=render;render=function(){if(!me&&booting){$('#app').innerHTML='<div class="hero mut" style="margin-top:30vh">Loading…</div>';return}_r()};
+['pointerdown','keydown','touchstart'].forEach(ev=>addEventListener(ev,()=>LA=Date.now(),{passive:true}));
+async function tick(){if(me&&!document.hidden&&!PEND){try{const r=await api('rev');if(r.rev!==REV){LA=Date.now();await load()}}catch(e){if(e.status==401){me=null;ST.set(TK,'');render()}}}setTimeout(tick,Date.now()-LA<60000?4000:15000)}
+setTimeout(tick,4000);
+document.addEventListener('visibilitychange',()=>{if(me&&!document.hidden)load()});
+if(ST.get(TK)){booting=true;load().finally(()=>{booting=false;render()})}
+function loadX(){return window.XLSX?Promise.resolve():new Promise((ok,no)=>{const s=document.createElement('script');s.src='https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';s.onload=ok;s.onerror=()=>no(new Error('Could not load the Excel library (check internet)'));document.head.appendChild(s)})}
+async function getLog(){return null}
+async function exportXlsx(){try{await loadX();const L=P().slice().sort((a,b)=>a.cat.localeCompare(b.cat)||a.brand.localeCompare(b.brand)||a.model.localeCompare(b.model));
+const rows=L.map(p=>{const st=p.stock||{},q=Object.values(st).reduce((a,b)=>a+(+b||0),0),r={Category:p.cat,Brand:p.brand,Model:p.model,Specs:specs(p),Qty:q,Status:q<=0?'Out of stock':q<=2?'Low stock':'In stock',MRP:p.mrp===''?'':+p.mrp};vis().forEach(o=>r['Qty · '+o.name]=+st[o.id]||0);if(me.owner){r['Dealer price']=p.dealer===''?'':+p.dealer;r['Stock value (dealer)']=q*(+p.dealer||0)}return r});
+const wb=XLSX.utils.book_new(),ws=XLSX.utils.json_to_sheet(rows.length?rows:[{Category:'No stock yet'}]);ws['!cols']=[{wch:18},{wch:14},{wch:22},{wch:32},{wch:6},{wch:13},{wch:10},{wch:12},{wch:18}];XLSX.utils.book_append_sheet(wb,ws,'Stock');
+const log=me.owner?await getLog():null;
+if(log){const lr=log.map(e=>({'Date & time':new Date(e.t).toLocaleString('en-IN'),'By':e.who,Action:e.act,Outlet:e.outlet||'',Category:e.cat,Brand:e.brand,Model:e.model,'Qty before':e.from??'','Qty after':e.to??'',Change:(e.from!=null&&e.to!=null)?e.to-e.from:''}));const w2=XLSX.utils.json_to_sheet(lr.length?lr:[{'Date & time':'No activity yet'}]);w2['!cols']=[{wch:20},{wch:12},{wch:17},{wch:16},{wch:14},{wch:22},{wch:10},{wch:10},{wch:8}];XLSX.utils.book_append_sheet(wb,w2,'Activity log')}
+const name='mehta-sales-stock-'+new Date().toISOString().slice(0,10)+'.xlsx';
+const dl=window.claude&&claude.use?await claude.use('downloads'):null;
+if(dl)await dl.save({filename:name,data:XLSX.write(wb,{bookType:'xlsx',type:'array'})});else XLSX.writeFile(wb,name);
+note('Excel ready ✓ '+name,1)}catch(e){note('Excel export failed: '+(e.message||e.code))}}
+const vis=()=>(db.outlets||[]).filter(o=>((me&&me.outlets)||[]).includes(o.id));
+function reQty(){if(S.out&&!vis().some(o=>o.id==S.out))S.out='';db.products.forEach(p=>{const st=p.stock||{};p.qty=S.out?(+st[S.out]||0):Object.values(st).reduce((a,b)=>a+(+b||0),0)})}
+function outletLine(p){if(S.out||vis().length<2)return'';return`<div class="ol">${vis().map(o=>esc(o.name)+' <b>'+((p.stock||{})[o.id]||0)+'</b>').join(' · ')}</div>`}
+function outletInputs(){return vis().map(o=>`<div><label>Qty · ${esc(o.name)}</label><input type="number" min="0" data-fs="${esc(o.id)}" value="${esc((F.stock||{})[o.id]??'')}"></div>`).join('')}
+function stepper(p){return vis().map(o=>{const n=+(p.stock||{})[o.id]||0;return`<div class="os"><small>${esc(o.name)}</small>${me.edit||me.owner?`<button data-act="qty" data-id="${p.id}" data-o="${esc(o.id)}" data-d="-1">−</button> <b>${n}</b> <button data-act="qty" data-id="${p.id}" data-o="${esc(o.id)}" data-d="1">+</button>`:me.sell?`<button data-act="qty" data-id="${p.id}" data-o="${esc(o.id)}" data-d="-1">−</button> <b>${n}</b>`:`<b>${n}</b>`}</div>`}).join('')}
+function outletsView(){return`<div class="box"><h2>Add outlet</h2><div class="f"><div><label>Outlet name</label><input id="onew" placeholder="e.g. Main Shop, Station Road"></div></div><p><button class="p" data-act="addO">Add outlet</button><span class="err" id="oerr"></span></p></div><div class="box"><h2>Your outlets</h2>${db.outlets.map(o=>`<div class="r" style="gap:8px;padding:6px 0;border-bottom:1px solid var(--bd)"><input data-on="${esc(o.id)}" value="${esc(o.name)}" style="flex:1"><button data-act="renO" data-id="${esc(o.id)}">Rename</button><button class="dg" data-act="delO" data-id="${esc(o.id)}">${S.sure=='o:'+o.id?'Sure?':'Delete'}</button></div>`).join('')}<p class="mut">An outlet can only be deleted once its stock is zero. Add stock for each outlet when you add or edit a product.</p></div>`}
+async function addOutlet(){const n=$('#onew').value.trim();if(!n){$('#oerr').textContent=' Enter a name';return}try{apply(await api('saveO',{name:n}));note('Outlet added ✓',1)}catch(e){$('#oerr').textContent=' '+e.message}render()}
+async function renOutlet(id){const el=document.querySelector('[data-on="'+id+'"]');try{apply(await api('saveO',{id,name:el.value}));note('Renamed ✓',1)}catch(e){note(e.message)}render()}
+async function delOutlet(id){if(S.sure!='o:'+id){S.sure='o:'+id;render();return}S.sure='';try{apply(await api('delO',{id}));note('Outlet deleted',1)}catch(e){note(e.message)}render()}
+const ROLES={owner:{label:'Owner',add:1,edit:1,del:1,sell:1,d:'Full access like you: sees dealer prices and manages team, outlets and all stock. Only you can create or remove Owners.'},manager:{label:'Manager',add:1,edit:1,del:1,sell:1,d:'Can add, edit and delete products and change stock. Cannot see dealer prices or manage the team.'},store:{label:'Store Keeper',add:1,edit:1,del:0,sell:1,d:'Can add products and change stock. Cannot delete products or see dealer prices.'},sales:{label:'Sales Officer',add:0,edit:0,del:0,sell:1,d:'Can browse the catalogue and record sales by reducing stock. Cannot add, edit or delete products.'}};
+const roleLabel=u=>(ROLES[u&&u.role]||{label:'Custom'}).label;
+function roleBlock(){const opts=Object.keys(ROLES).filter(k=>k!='owner'||me.master).map(k=>`<option value="${k}" ${U.role==k?'selected':''}>${ROLES[k].label}</option>`).join('')+`<option value="custom" ${U.role=='custom'?'selected':''}>Custom…</option>`;
+const r=ROLES[U.role];return`<h2>Role</h2><select data-role>${opts}</select><p class="mut" style="margin:6px 0 10px">${r?esc(r.d):'Choose exactly what this person can do.'}</p>${U.role=='custom'?`<div class="pm"><label><input type="checkbox" data-uc="add" ${U.add?'checked':''}> Add items</label><label><input type="checkbox" data-uc="edit" ${U.edit?'checked':''}> Edit stock / items</label><label><input type="checkbox" data-uc="del" ${U.del?'checked':''}> Delete items</label><label><input type="checkbox" data-uc="sell" ${U.sell?'checked':''}> Reduce stock (sales)</label></div>`:''}`}
+var AX;
+async function getLog(){return (await api('log')).log}
+render();
+</script>
+</body>
+</html>

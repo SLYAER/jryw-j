@@ -1,0 +1,6 @@
+{
+  "name": "Mehta Sales",
+  "description": "Stock and catalogue management system for consumer electronics and appliances with multi-outlet tracking, role-based access, and Excel export.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
