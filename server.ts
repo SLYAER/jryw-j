@@ -7,7 +7,22 @@ async function startServer() {
   const app = express();
   const PORT = process.env.PORT ? parseInt(process.env.PORT, 10) : 3000;
 
-  app.use(express.json());
+  app.use(express.json({ limit: '10mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+
+  // CORS and preflight
+  app.use('/api', (req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if (req.method === 'OPTIONS') {
+      return res.status(204).end();
+    }
+    if (req.method === 'GET') {
+      return res.status(200).json({ ok: true, app: 'Mehta Sales API' });
+    }
+    next();
+  });
 
   // Mount JSON-RPC /api endpoint
   app.all(['/api', '/api/*'], async (req, res) => {
