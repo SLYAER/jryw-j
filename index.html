@@ -111,19 +111,7 @@ let db=null;try{db=JSON.parse(ST.get('shopdb'))}catch(e){}db=db||{products:[],us
 let cloud=false,H=null,loc={products:[],users:[]},rp=[],dm={},rdy=false;
 const save=()=>{if(!cloud)ST.set('shopdb',JSON.stringify(db))};
 function note(m,ok){const t=$('#toast');t.textContent=m;t.style.background=ok==2?'#4f46e5':ok?'#12a150':'#e5484d';t.style.display='block';setTimeout(()=>t.style.display='none',4000)}
-const strip=p=>{const{dealer,...x}=p;return x};
-const uid=n=>'u_'+encodeURIComponent(n.toLowerCase()).replace(/%/g,'_');
-async function hash(n,p){try{const b=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(n.toLowerCase()+':'+p));return[...new Uint8Array(b)].map(x=>x.toString(16).padStart(2,'0')).join('')}catch(e){return n.toLowerCase()+':'+p}}
-async function sync(kind,id){save();if(!H)return;try{
-if(kind=='p'){const p=db.products.find(p=>p.id==id);if(p){await H.doc('products/'+id).set(strip(p));if(me.owner&&p.dealer!=='')await H.doc('dealer/'+id).set({v:p.dealer})}else{await H.doc('products/'+id).delete();if(me.owner)await H.doc('dealer/'+id).delete().catch(()=>{})}}
-else{const u=db.users.find(x=>x.name==id);if(u)await H.doc('team/'+uid(id)).set(u);else await H.doc('team/'+uid(id)).delete()}}catch(e){note('Could not save to the shared database: '+(e.message||e.code))}}
-function rebuild(){db.products=rp.map(p=>({...p,dealer:dm[p.id]??''}))}
 function refresh(){if(!me)return;const a=document.activeElement;if(a&&/INPUT|SELECT/.test(a.tagName)){if(S.tab=='cat'&&$('#res')){$('#fc').innerHTML=facets();$('#res').innerHTML=results()}}else render()}
-(async()=>{try{if(!(window.claude&&claude.use))return;const d=await claude.use('db');if(!d)return;H=d;cloud=true;loc=db;db={products:[],users:[]};
-H.collection('products').onSnapshot(s=>{rp=s.docs.map(d=>({...d.data(),id:d.id}));rdy=true;rebuild();refresh()},()=>{});
-H.collection('dealer').onSnapshot(s=>{dm={};s.docs.forEach(d=>dm[d.id]=d.data().v);rebuild();refresh()},()=>{});
-H.collection('team').onSnapshot(s=>{db.users=s.docs.map(d=>d.data());refresh()},()=>{});
-if(me)me=mk(me.name)||me;refresh()}catch(e){}})();
 const CATS={
 'TV':{i:'📺',f:[{k:'size',l:'Screen size',u:' inch',o:['24','32','40','43','50','55','65','75']},{k:'type',l:'Type',o:['LED','Smart LED','Android','Google TV','QLED']}]},
 'Washing Machine':{i:'🧺',f:[{k:'type',l:'Type',o:['Semi-Automatic','Fully Automatic']},{k:'load',l:'Load',o:['Top Load','Front Load'],when:a=>a.type=='Fully Automatic'},{k:'cap',l:'Capacity',u:' kg',o:['6','6.5','7','7.5','8','9','10']}]},
@@ -176,11 +164,6 @@ ${roleBlock()}
 <h2>Outlets this person can use</h2><div class="bl">${db.outlets.map(o=>`<label><input type="checkbox" data-uo="${esc(o.id)}" ${U.outlets==null||U.outlets.includes(o.id)?'checked':''}> ${esc(o.name)}</label>`).join('')}</div>
 <p><button class="p" data-act="saveU">${U.old?'Update':'Add member'}</button> ${U.old?'<button data-act="newU">Cancel</button>':''}<span class="err" id="uerr"></span></p></div>
 <div class="box"><h2>Team</h2>${db.users.map(u=>`<div class="r" style="padding:8px 0;border-bottom:1px solid var(--bd)"><span><b>${esc(u.name)}</b> <span class="pill">${esc(roleLabel(u))}</span> <span class="mut">${[u.add&&'add',u.edit&&'edit',u.del&&'delete',u.sell&&!u.edit&&'reduce stock'].filter(Boolean).join(', ')||'view only'}${u.blocked.length?' · blocked: '+esc(u.blocked.join(', ')):''}</span></span><span><button data-act="editU" data-v="${esc(u.name)}">Edit</button> <button class="dg" data-act="delU" data-v="${esc(u.name)}">${S.sure=='u:'+u.name?'Sure?':'Remove'}</button></span></div>`).join('')||'<span class="mut">No members yet.</span>'}</div>`}
-function render(){const a=$('#app');
-if(!me){a.innerHTML=`<div class="box hero"><div class="big">🏬</div><h1>Mehta Sales</h1><p class="mut">Sign in to continue</p><input id="lu" placeholder="Username" value="parth" autocomplete="username" autocapitalize="none" autocorrect="off"><input id="lp" type="password" placeholder="Password" value="apple8901" autocomplete="current-password" autocapitalize="none" autocorrect="off"><button class="p" data-act="login">Sign in</button><div class="err" id="le"></div></div>`;return}
-const tabs=[['cat','Catalogue'],['stock','Stock']].concat(me.owner?[['team','Team']]:[]);
-const up=cloud&&me.owner&&rdy&&!rp.length&&(loc.products.length||loc.users.length);
-a.innerHTML=`<header><h1>🏬 Mehta Sales</h1><span class="mut"><span class="stt">${cloud?'🟢 Live · shared':'💾 This device only'}</span> ${esc(me.name)}${me.owner?' (owner)':''} ${me.owner||me.add?'<button class="p" data-act="addP">＋ Add product</button> ':''}<button data-act="logout">Log out</button></span></header>${up?`<div class="box">This browser has stock saved locally. <button class="p" data-act="up">Upload it to the shared database</button></div>`:''}<div class="tabs">${tabs.map(t=>`<button class="${S.tab==t[0]?'on':''}" data-act="tab" data-v="${t[0]}">${t[1]}</button>`).join('')}</div>${S.tab=='cat'?catView():S.tab=='stock'?stockView():teamView()}`}
 function prune(){const ok=fs(S.cat,S.a).map(f=>f.k);for(const k in S.a)if(!ok.includes(k))delete S.a[k]}
 document.addEventListener('click',e=>{const t=e.target.closest('[data-act]');if(!t)return;const a=t.dataset.act,v=t.dataset.v,id=t.dataset.id;
 if(a!='menu')S.menu=0;if(a=='xlsx'){exportXlsx();render();return}if(a=='addO'){addOutlet();return}if(a=='renO'){renOutlet(id);return}if(a=='delO'){delOutlet(id);return}if(a=='axl'){ST.set('autox',ST.get('autox')=='1'?'0':'1');render();return}if(a=='login'){doLogin();return}if(a=='saveU'){saveUser();return}if(a=='up'){upload();return}

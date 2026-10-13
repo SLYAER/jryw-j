@@ -27,17 +27,39 @@ const fail = (status, error) => Object.assign(new Error(error), { status });
 const b64 = (s) => Buffer.from(s).toString('base64url');
 const mac = (p) => crypto.createHmac('sha256', SECRET).update(p).digest('base64url');
 const sign = (d) => { const p = b64(JSON.stringify(d)); return p + '.' + mac(p); };
-const same = (a, b) => a.length === b.length && crypto.timingSafeEqual(Buffer.from(a), Buffer.from(b));
+const same = (a, b) => {
+  try {
+    if (!a || !b) return false;
+    const bufA = Buffer.from(String(a));
+    const bufB = Buffer.from(String(b));
+    return bufA.length === bufB.length && crypto.timingSafeEqual(bufA, bufB);
+  } catch {
+    return false;
+  }
+};
 function verify(t) {
   try {
-    const [p, s] = String(t).split('.');
+    if (!t) return null;
+    const parts = String(t).split('.');
+    if (parts.length !== 2) return null;
+    const [p, s] = parts;
+    if (!p || !s) return null;
     if (!same(s, mac(p))) return null;
-    const d = JSON.parse(Buffer.from(p, 'base64url').toString());
-    return d.exp > Date.now() ? d : null;
+    const d = JSON.parse(Buffer.from(p, 'base64url').toString('utf-8'));
+    return d && d.exp > Date.now() ? d : null;
   } catch { return null; }
 }
 const hashPw = (pw) => { const salt = crypto.randomBytes(16).toString('hex'); return salt + ':' + crypto.scryptSync(pw, salt, 32).toString('hex'); };
-const checkPw = (pw, st) => { const [s, h] = String(st).split(':'); return same(crypto.scryptSync(pw, s, 32).toString('hex'), h); };
+const checkPw = (pw, st) => {
+  try {
+    if (!pw || !st) return false;
+    const [s, h] = String(st).split(':');
+    if (!s || !h) return false;
+    return same(crypto.scryptSync(pw, s, 32).toString('hex'), h);
+  } catch {
+    return false;
+  }
+};
 const rid = () => Math.random().toString(36).slice(2, 9);
 
 // Role presets. 'custom' lets the owner tick permissions by hand.
@@ -412,11 +434,15 @@ export default async function apiHandler(req, res) {
     if (req.method !== 'POST') throw fail(405, 'POST only');
     const b = typeof req.body === 'string' ? JSON.parse(req.body || '{}') : req.body || {};
     const fn = actions[b.a];
-    if (!fn) throw fail(400, 'Unknown action');
+    if (!fn) throw fail(400, 'Unknown action: ' + String(b.a || 'none'));
     const me = b.a === 'login' || b.a === 'rev' ? null : await whoAmI(req);
     res.status(200).json(await fn(req, b, me));
   } catch (e) {
-    res.status(e.status || 500).json({ error: e.status ? e.message : 'Server error' });
-    if (!e.status) console.error(e);
+    const status = typeof e.status === 'number' && e.status >= 400 && e.status < 600 ? e.status : 500;
+    const errorMsg = e.message || 'Server error';
+    if (!res.headersSent) {
+      res.status(status).json({ error: errorMsg });
+    }
+    console.error('API Error (' + status + '):', e);
   }
 }

@@ -10,8 +10,15 @@ async function startServer() {
   app.use(express.json());
 
   // Mount JSON-RPC /api endpoint
-  app.all('/api', (req, res) => {
-    apiHandler(req, res);
+  app.all(['/api', '/api/*'], async (req, res) => {
+    try {
+      await apiHandler(req, res);
+    } catch (err) {
+      console.error('Unhandled server error on /api:', err);
+      if (!res.headersSent) {
+        res.status(500).json({ error: (err as Error).message || 'Server error' });
+      }
+    }
   });
 
   const isProduction = process.env.NODE_ENV === 'production';
